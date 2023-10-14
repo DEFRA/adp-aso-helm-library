@@ -1,0 +1,36 @@
+{{- define "adp-aso-helm-library.namespace-topic" -}}
+{{- range $namespaceTopic := .Values.namespaceTopics }}
+{{- $requiredMsg := include "adp-aso-helm-library.default-check-required-msg" . }}
+apiVersion: servicebus.azure.com/v1api20211101
+kind: NamespacesTopic
+{{- $topicNamePrefix := required (printf $requiredMsg "namespace") $.Values.namespace }}
+{{- $topicNameSuffix := required (printf $requiredMsg "namespaceTopic.name") $namespaceTopic.name }}
+metadata:
+  name: {{ $topicNamePrefix }}-{{ $topicNameSuffix }}
+  namespace: {{ required (printf $requiredMsg "namespace") $.Values.namespace | quote }}  
+  {{- with $.Values.asoAnnotations }}
+  annotations: 
+    {{- toYaml . | nindent 4 }}
+  {{- end }}  
+spec:
+  azureName: {{ $topicNamePrefix }}-{{ $topicNameSuffix }}
+  defaultMessageTimeToLive: {{ $namespaceTopic.defaultMessageTimeToLive | default "P14D" | quote }} 
+  duplicateDetectionHistoryTimeWindow: {{ $namespaceTopic.duplicateDetectionHistoryTimeWindow | default "PT10M" | quote }}  
+  enableBatchedOperations: {{ $namespaceTopic.enableBatchedOperations | default true }}
+  enableExpress: {{ $namespaceTopic.enableExpress | default false }}
+  enablePartitioning: {{ $namespaceTopic.enablePartitioning | default false }}
+  maxMessageSizeInKilobytes: {{ $namespaceTopic.maxMessageSizeInKilobytes | default 1024 }} 
+  maxSizeInMegabytes: {{ $namespaceTopic.maxSizeInMegabytes | default 1024 }} 
+  requiresDuplicateDetection: {{ $namespaceTopic.requiresDuplicateDetection | default false }}
+  supportOrdering: {{ $namespaceTopic.supportOrdering | default true }}
+  {{- $subscriptionId := required (printf $requiredMsg "subscriptionId") $.Values.subscriptionId }}
+  {{- $serviceBusResourceGroupName := required (printf $requiredMsg "serviceBusResourceGroupName") $.Values.serviceBusResourceGroupName }}
+  {{- $serviceBusNamespaceName := required (printf $requiredMsg "serviceBusNamespaceName") $.Values.serviceBusNamespaceName }}
+  owner:
+    armId: {{ printf "/subscriptions/%s/resourceGroups/%s/providers/Microsoft.ServiceBus/namespaces/%s" $subscriptionId $serviceBusResourceGroupName $serviceBusNamespaceName }} 
+---  
+{{- if $namespaceTopic.topicSubscriptions }}    
+{{- include "adp-aso-helm-library.namespace-topic-subscription" (list $ .) }}   
+{{- end }} 
+{{- end }}
+{{- end }}
