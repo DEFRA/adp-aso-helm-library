@@ -3,8 +3,8 @@
 {{- $requiredMsg := include "adp-aso-helm-library.default-check-required-msg" . }}
 apiVersion: servicebus.azure.com/v1api20211101
 kind: NamespacesTopic
-{{- $topicNamePrefix := required (printf $requiredMsg "namespace") $.Values.namespace }}
-{{- $topicNameSuffix := required (printf $requiredMsg "namespaceTopic.name") $namespaceTopic.name }}
+{{- $topicNamePrefix := (required (printf $requiredMsg "namespace") $.Values.namespace) | lower }}
+{{- $topicNameSuffix := (required (printf $requiredMsg "namespaceTopic.name") $namespaceTopic.name) | lower }}
 metadata:
   name: {{ $topicNamePrefix }}-{{ $topicNameSuffix }}
   namespace: {{ required (printf $requiredMsg "namespace") $.Values.namespace | quote }}  

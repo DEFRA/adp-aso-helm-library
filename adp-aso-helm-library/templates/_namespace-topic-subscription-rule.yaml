@@ -1,0 +1,59 @@
+{{- define "adp-aso-helm-library.namespace-topic-subscription-rule" -}}
+{{- $ := index . 0 }}
+{{- $topicSubscriptionObj := index . 1 }}
+{{- $namespaceTopicName := index . 2 }}
+{{- range $namespaceTopicSubscriptionRule := $topicSubscriptionObj.topicSubscriptionRules }}
+{{- $requiredMsg := include "adp-aso-helm-library.default-check-required-msg" . }}
+apiVersion: servicebus.azure.com/v1api20211101
+kind: NamespacesTopicsSubscriptionsRule
+metadata:
+  name: {{ (required (printf $requiredMsg "namespaceTopicSubscriptionRule.name") $namespaceTopicSubscriptionRule.name) | lower }}
+  namespace: {{ required (printf $requiredMsg "namespace") $.Values.namespace | quote }}   
+spec:
+  azureName: {{ (required (printf $requiredMsg "namespaceTopicSubscriptionRule.name") $namespaceTopicSubscriptionRule.name) | lower }}
+  action: {}
+  filterType: {{ required (printf $requiredMsg "namespaceTopicSubscriptionRule.filterType") $namespaceTopicSubscriptionRule.filterType }}
+  {{- if eq $namespaceTopicSubscriptionRule.filterType "CorrelationFilter"  }}
+  correlationFilter: 
+    {{- if $namespaceTopicSubscriptionRule.correlationFilter.contentType }}
+    contentType: {{ $namespaceTopicSubscriptionRule.correlationFilter.contentType | quote }}
+    {{- end }} 
+    {{- if $namespaceTopicSubscriptionRule.correlationFilter.correlationId }}
+    correlationId: {{ $namespaceTopicSubscriptionRule.correlationFilter.correlationId | quote }}
+    {{- end }} 
+    {{- if $namespaceTopicSubscriptionRule.correlationFilter.label }}
+    label: {{ $namespaceTopicSubscriptionRule.correlationFilter.label | quote }}
+    {{- end }} 
+    {{- if $namespaceTopicSubscriptionRule.messageId }}
+    messageId: {{ $namespaceTopicSubscriptionRule.correlationFilter.messageId | quote }}
+    {{- end }} 
+    {{- if $namespaceTopicSubscriptionRule.replyTo }}
+    replyTo: {{ $namespaceTopicSubscriptionRule.correlationFilter.replyTo | quote }}
+    {{- end }} 
+    {{- if $namespaceTopicSubscriptionRule.replyToSessionId }}
+    replyToSessionId: {{ $namespaceTopicSubscriptionRule.correlationFilter.replyToSessionId | quote }}
+    {{- end }} 
+    {{- if $namespaceTopicSubscriptionRule.sessionId }}
+    sessionId: {{ $namespaceTopicSubscriptionRule.correlationFilter.sessionId | quote }}
+    {{- end }} 
+    {{- if $namespaceTopicSubscriptionRule.to }}
+    to: {{ $namespaceTopicSubscriptionRule.correlationFilter.to | quote }}
+    {{- end }} 
+    properties: {}
+  {{- end }} 
+  {{- if eq $namespaceTopicSubscriptionRule.filterType "SqlFilter"  }}
+  sqlFilter:
+    {{- if $namespaceTopicSubscriptionRule.sqlFilter.sqlExpression }}
+    sqlExpression: {{ $namespaceTopicSubscriptionRule.sqlFilter.sqlExpression | quote }}
+    {{- end }} 
+  {{- end }} 
+  {{- $subscriptionId := required (printf $requiredMsg "subscriptionId") $.Values.subscriptionId }}
+  {{- $serviceBusResourceGroupName := required (printf $requiredMsg "serviceBusResourceGroupName") $.Values.serviceBusResourceGroupName }}
+  {{- $serviceBusNamespaceName := required (printf $requiredMsg "serviceBusNamespaceName") $.Values.serviceBusNamespaceName }}
+  {{- $serviceBusTopicName := (printf "%s-%s" $.Values.namespace $namespaceTopicName) | lower }}
+  {{- $serviceBusTopicSubscriptionName := $topicSubscriptionObj.name | lower }}
+  owner:
+    armId: {{ printf "/subscriptions/%s/resourceGroups/%s/providers/Microsoft.ServiceBus/namespaces/%s/topics/%s/subscriptions/%s" $subscriptionId $serviceBusResourceGroupName $serviceBusNamespaceName $serviceBusTopicName $serviceBusTopicSubscriptionName }}                     
+---  
+{{- end }}
+{{- end }}

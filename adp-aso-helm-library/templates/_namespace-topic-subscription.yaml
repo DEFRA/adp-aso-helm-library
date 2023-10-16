@@ -1,19 +1,15 @@
 {{- define "adp-aso-helm-library.namespace-topic-subscription" -}}
 {{- $ := index . 0 }}
-{{- $arg := index . 1 }}
-{{- range $namespaceTopicSubscription := $arg.topicSubscriptions }}
+{{- $namespaceTopicObj := index . 1 }}
+{{- range $namespaceTopicSubscription := $namespaceTopicObj.topicSubscriptions }}
 {{- $requiredMsg := include "adp-aso-helm-library.default-check-required-msg" . }}
 apiVersion: servicebus.azure.com/v1api20211101
 kind: NamespacesTopicsSubscription
 metadata:
-  name: {{ required (printf $requiredMsg "namespaceTopicSubscription.name") $namespaceTopicSubscription.name }}
+  name: {{ (required (printf $requiredMsg "namespaceTopicSubscription.name") $namespaceTopicSubscription.name) | lower }}
   namespace: {{ required (printf $requiredMsg "namespace") $.Values.namespace | quote }}  
-  {{- with $.Values.asoAnnotations }}
-  annotations: 
-    {{- toYaml . | nindent 4 }}
-  {{- end }}  
 spec:
-  azureName: {{ required (printf $requiredMsg "namespaceTopicSubscription.name") $namespaceTopicSubscription.name }}
+  azureName: {{ (required (printf $requiredMsg "namespaceTopicSubscription.name") $namespaceTopicSubscription.name) | lower }}
   deadLetteringOnFilterEvaluationExceptions: {{ $namespaceTopicSubscription.deadLetteringOnFilterEvaluationExceptions | default false }}
   deadLetteringOnMessageExpiration: {{ $namespaceTopicSubscription.deadLetteringOnMessageExpiration | default false }}
   defaultMessageTimeToLive: {{ $namespaceTopicSubscription.defaultMessageTimeToLive | default "P14D" | quote }}
@@ -22,7 +18,6 @@ spec:
   {{- if $namespaceTopicSubscription.forwardTo }}
   forwardTo: {{ $namespaceTopicSubscription.forwardTo }}
   {{- end }}
-  # forwardDeadLetteredMessagesTo: {{ $namespaceTopicSubscription.forwardDeadLetteredMessagesTo | default "" }}
   isClientAffine: {{ $namespaceTopicSubscription.isClientAffine | default false }}
   lockDuration: {{ $namespaceTopicSubscription.lockDuration | default "PT1M" | quote }} 
   maxDeliveryCount: {{ $namespaceTopicSubscription.maxDeliveryCount | default 10 }} 
@@ -30,9 +25,12 @@ spec:
   {{- $subscriptionId := required (printf $requiredMsg "subscriptionId") $.Values.subscriptionId }}
   {{- $serviceBusResourceGroupName := required (printf $requiredMsg "serviceBusResourceGroupName") $.Values.serviceBusResourceGroupName }}
   {{- $serviceBusNamespaceName := required (printf $requiredMsg "serviceBusNamespaceName") $.Values.serviceBusNamespaceName }}
-  {{- $serviceBusTopicName := printf "%s-%s" $.Values.namespace $arg.name }}
+  {{- $serviceBusTopicName := (printf "%s-%s" $.Values.namespace $namespaceTopicObj.name) | lower }}
   owner:
     armId: {{ printf "/subscriptions/%s/resourceGroups/%s/providers/Microsoft.ServiceBus/namespaces/%s/topics/%s" $subscriptionId $serviceBusResourceGroupName $serviceBusNamespaceName $serviceBusTopicName }}                       
 ---  
+{{- if $namespaceTopicSubscription.topicSubscriptionRules }}    
+{{- include "adp-aso-helm-library.namespace-topic-subscription-rule" (list $ . $namespaceTopicObj.name) }}   
+{{- end }} 
 {{- end }}
 {{- end }}
