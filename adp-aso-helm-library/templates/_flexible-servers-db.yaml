@@ -6,7 +6,7 @@ metadata:
   {{ $serverName := required (printf $requiredMsg "postgresServerName") .Values.postgresServerName }}
   {{ $dbName := required (printf $requiredMsg "postgres.db.name") .Values.postgres.db.name }}
   {{ $namespace := required (printf $requiredMsg "namespace") .Values.namespace }}
-  name: {{ (printf "%s-%s-%s" $serverName $namespace $dbName) | lower | replace "_" "-" }}
+  name: {{ (printf "%s-%s-%s" $serverName $namespace $dbName) | lower }}
   namespace: {{ $namespace }}
   {{ with .Values.asoAnnotations }}
   annotations:
