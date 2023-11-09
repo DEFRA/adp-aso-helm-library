@@ -6,7 +6,7 @@ A Helm chart library that captures general configuration for Azure Service Opera
 
 In your microservice Helm chart:
   * Update `Chart.yaml` to `apiVersion: v2`.
-  * Add the library chart under `dependencies` and choose the version you want (example below). Version number can include `~` or `^` to pick up latest PATCH and MINOR versions respectively.
+  * Add the library chart under `dependencies` and choose the version you want (example below). Version number can include `~` or `^` to pick up latest PATCH and MINOR versions respectively...
   * Issue the following commands to add the repo that contains the library chart, update the repo, then update dependencies in your Helm chart:
 
 ```
