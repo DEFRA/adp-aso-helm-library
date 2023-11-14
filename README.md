@@ -422,7 +422,7 @@ workloadIdentity:
 
 This template also optionally allows you to create `Federated credentials` for a given User Assigned Identity by providing `federatedCreds` properties in the userAssignedIdentity object.
 
-Below are the minimum values that are required to be set in the parent chart's values.yaml to create a `workloadIdentity`, `roleAssignments` and `federatedCreds`.
+Below are the minimum values that are required to be set in the parent chart's values.yaml to create a `workloadIdentity`.
 
 ```
 workloadIdentity:     
