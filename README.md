@@ -382,17 +382,19 @@ postgres:
 ```
 Please note that the postgres DB name is prefixed with `namespace` internally. For example, if the namespace name is "adp-microservice" and you have provided the DB name as "demo-db," then in the postgres server, it creates a database with the name "adp-microservice-demo-db".
 
-### UserAssignedIdentity
+### WorkloadIdentity
 
-* Template file: `_userassignedidentity.yaml`
-* Template name: `adp-aso-helm-library.userassignedidentity`
+* Template file: `_workload-identity.yaml`
+* Template name: `adp-aso-helm-library.workload-identity`
+
+As part of WorkloadIdentity, `UserAssignedIdentity` and `ServiceAccount` objects are created with necessary federated credentials.
 
 An ASO `UserAssignedIdentity` object to create a Microsoft.ManagedIdentity/userAssignedIdentities resource.
 
-A basic usage of this object template would involve the creation of `templates/userassignedidentity.yaml` in the parent Helm chart (e.g. `adp-microservice`) containing:
+A basic usage of this object template would involve the creation of `templates/workload-identity.yaml` in the parent Helm chart (e.g. `adp-microservice`) containing:
 
 ```
-{{- include "adp-aso-helm-library.userassignedidentity" . -}}
+{{- include "adp-aso-helm-library.workload-identity" . -}}
 
 ```
 
@@ -413,20 +415,20 @@ For e.g. In SND1 if the `TEAM_MI_PREFIX` value is set to "sndadpinfmid1401" and 
 The following values can optionally be set in the parent chart's `values.yaml` to set the other properties for servicebus queues:
 
 ```
-userAssignedIdentity:      
+workloadIdentity:      
   location: <string>
 
 ```
 
 This template also optionally allows you to create `Federated credentials` for a given User Assigned Identity by providing `federatedCreds` properties in the userAssignedIdentity object.
 
-Below are the minimum values that are required to be set in the parent chart's values.yaml to create a `userAssignedIdentity`, `roleAssignments` and `federatedCreds`.
+Below are the minimum values that are required to be set in the parent chart's values.yaml to create a `workloadIdentity`.
 
 ```
-userAssignedIdentity:     
-    federatedCreds:                      <Array of Object> 
-      - namespace: <string>                    
-        serviceAccountName: <string>     
+workloadIdentity:     
+  federatedCreds:                      <Array of Object> 
+    - namespace: <string>                    
+      serviceAccountName: <string>     
 
 ```
 
@@ -434,12 +436,32 @@ For e.g. The below example will create one userAssignedIdentity, two role assign
 
 ```
 
-userAssignedIdentity:
+workloadIdentity:
   federatedCreds: 
     - namespace: ffc-demo
       serviceAccountName: ffc-demo    
                     
 ```
+
+### Service Account
+
+* Template file: `_service-account.yaml`
+* Template name: `adp-aso-helm-library.service-account`
+
+A `ServiceAccount` manifest to create a kubernetes ServiceAccount. This ServiceAccount takes the clientId of the UserAssignedManagedIdentity created to act as WorkloadIdentity. By default, creation of ServiceAccount for WorkloadIdentity is done as part of the WorkloadIdentity template by adding the below include statement.
+
+```
+{{- include "adp-aso-helm-library.service-account" . }}   
+
+```
+
+This template uses the below values, whose values are set using platform variables in the `adp-flux-services` repository as a part of the service's ASO helmrelease value configuration, and you don't need to set them explicitly in the values.yaml file.
+
+- serviceName
+- namespace
+- teamName
+
+The `clientId` for the ServiceAccount is obtained dynamically using `Helm Lookup` from the configMap output created by the UserAssignedIdentity.
 
 ### Storage
     In Progress

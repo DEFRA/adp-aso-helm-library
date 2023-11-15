@@ -1,4 +1,4 @@
-{{- define "adp-aso-helm-library.userassignedidentity" -}}
+{{- define "adp-aso-helm-library.workload-identity" -}}
 {{- $requiredMsg := include "adp-aso-helm-library.default-check-required-msg" . }}
 apiVersion: managedidentity.azure.com/v1api20181130
 kind: UserAssignedIdentity
@@ -6,7 +6,7 @@ metadata:
   {{- $managedIdName := include "managedidentity.name" . }}
   {{- $managedIdConfigMapName :=  include "managedidentity.configMapName" . }}
   {{- $teamRGName := required (printf $requiredMsg "teamResourceGroupName") .Values.teamResourceGroupName }}
-  {{- $userAssignedIdentityObject := required (printf $requiredMsg "userAssignedIdentity") .Values.userAssignedIdentity }}
+  {{- $workloadIdentityObject := required (printf $requiredMsg "workloadIdentity") .Values.workloadIdentity }}
   {{- $commontags := required (printf $requiredMsg "commontags") .Values.commontags }}
   name: {{ $managedIdName }}
   namespace: {{ required (printf $requiredMsg "namespace") .Values.namespace }}
@@ -16,8 +16,8 @@ metadata:
   {{- end }}
 spec:
   azureName: {{ $managedIdName }}
-  {{- if and .Values.userAssignedIdentity .Values.userAssignedIdentity.location }} 
-  location: {{ .Values.userAssignedIdentity.location | quote }}
+  {{- if and .Values.workloadIdentity .Values.workloadIdentity.location }} 
+  location: {{ .Values.workloadIdentity.location | quote }}
   {{- else }}
   location: "uksouth"
   {{- end }}
@@ -38,7 +38,10 @@ spec:
   owner:
     armId: {{ printf "/subscriptions/%s/resourceGroups/%s" $subscriptionId $teamRGName }}
 
-{{- if and .Values.userAssignedIdentity .Values.userAssignedIdentity.federatedCreds }}    
+---
+{{- include "adp-aso-helm-library.service-account" . }}   
+
+{{- if and .Values.workloadIdentity .Values.workloadIdentity.federatedCreds }}    
 --- 
 {{- include "adp-aso-helm-library.federated-credential" $ }}   
 {{- end }}    
