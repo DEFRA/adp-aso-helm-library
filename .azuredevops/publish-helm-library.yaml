@@ -6,6 +6,12 @@ trigger:
     include:
       - 'main'
 
+parameters:
+- name: publishFromFeature
+  displayName: Publish from feature branch
+  type: boolean
+  default: false
+
 pr:
   branches:
     include:
@@ -27,3 +33,4 @@ extends:
   parameters:
     helmLibraryName: 'adp-aso-helm-library'
     chartRepoPublicUrl: 'https://raw.githubusercontent.com/defra/adp-helm-repository/main/adp-aso-helm-library/'
+    publishFromFeature: ${{ parameters.publishFromFeature }}
