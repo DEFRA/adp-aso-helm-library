@@ -7,9 +7,9 @@ metadata:
   {{- $managedIdConfigMapName :=  include "managedidentity.configMapName" . }}
   {{- $teamRGName := required (printf $requiredMsg "teamResourceGroupName") .Values.teamResourceGroupName }}
   {{- $userAssignedIdentityObject := required (printf $requiredMsg "userAssignedIdentity") .Values.userAssignedIdentity }}
-  {{- $commontags := required (printf $requiredMsg "commontags") .Values.commontags }}
+  {{- $commonTags := required (printf $requiredMsg "commonTags") .Values.commonTags }}
   name: {{ $managedIdName }}
-  namespace: {{ required (printf $requiredMsg "namespace") .Values.namespace }}
+  namespace: {{ required (printf $requiredMsg "fluxConfigNamespace") .Values.fluxConfigNamespace }}
   {{- with .Values.asoAnnotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
@@ -33,7 +33,7 @@ spec:
         name: {{ $managedIdConfigMapName }} 
         key: tenantId    
   tags: 
-  {{- include "adp-aso-helm-library.commontags" (list . "") | indent 4 }} 
+  {{- include "adp-aso-helm-library.commonTags" (list . "") | indent 4 }} 
   {{- $subscriptionId := required (printf $requiredMsg "subscriptionId") .Values.subscriptionId }}
   owner:
     armId: {{ printf "/subscriptions/%s/resourceGroups/%s" $subscriptionId $teamRGName }}

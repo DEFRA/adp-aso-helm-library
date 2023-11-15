@@ -8,20 +8,20 @@ A default message string to be used when checking for a required value
 {{/*
 Common Tags for Azure resources
 */}}
-{{- define "adp-aso-helm-library.commontags" -}}
+{{- define "adp-aso-helm-library.commonTags" -}}
 {{- $ := index . 0 }}
 {{- $userTags := index . 1 }}
 {{- $requiredMsg := include "adp-aso-helm-library.default-check-required-msg" . }}
-{{- if $.Values.commontags }}
-Environment: {{ required (printf $requiredMsg "commontags.Environment") $.Values.commontags.Environment | quote }}
-ServiceCode: {{ required (printf $requiredMsg "commontags.ServiceCode") $.Values.commontags.ServiceCode | quote }}
-ServiceName: {{ required (printf $requiredMsg "commontags.ServiceName") $.Values.commontags.ServiceName | quote }}
-ServiceType: {{ $.Values.commontags.ServiceType | default "Dedicated" }}
+{{- if $.Values.commonTags }}
+Environment: {{ required (printf $requiredMsg "commonTags.environment") $.Values.commonTags.environment | quote }}
+ServiceCode: {{ required (printf $requiredMsg "commonTags.serviceCode") $.Values.commonTags.serviceCode | quote }}
+ServiceName: {{ required (printf $requiredMsg "commonTags.serviceName") $.Values.commonTags.serviceName | quote }}
+ServiceType: {{ $.Values.commonTags.serviceType | default "Dedicated" }}
 ManagedBy: AzureServiceOperator
 Restriction: AUTOMATED CHANGES ONLY
-kubernetes_cluster: {{ required (printf $requiredMsg "commontags.kubernetes_cluster") $.Values.commontags.kubernetes_cluster | quote }}
-kubernetes_namespace: {{ required (printf $requiredMsg "commontags.kubernetes_namespace") $.Values.namespace | quote }}
-kubernetes_label_ServiceCode: {{ required (printf $requiredMsg "commontags.kubernetes_label_ServiceCode") $.Values.commontags.ServiceCode | quote }}
+kubernetes_cluster: {{ required (printf $requiredMsg "commonTags.kubernetes_cluster") $.Values.commonTags.kubernetes_cluster | quote }}
+kubernetes_namespace: {{ required (printf $requiredMsg "commonTags.kubernetes_namespace") $.Values.namespace | quote }}
+kubernetes_label_ServiceCode: {{ required (printf $requiredMsg "commonTags.kubernetes_label_serviceCode") $.Values.commonTags.kubernetes_label_serviceCode | quote }}
 {{- end }}
 {{- if $userTags }}
 {{ toYaml $userTags }}
