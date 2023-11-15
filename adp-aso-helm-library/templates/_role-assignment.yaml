@@ -1,5 +1,5 @@
 {{- define "adp-aso-helm-library.role-assignment" -}}
-{{- range $roleAssignment := $.Values.workloadIdentity.roleAssignments }}
+{{- range $roleAssignment := $.Values.userAssignedIdentity.roleAssignments }}
 {{- $requiredMsg := include "adp-aso-helm-library.default-check-required-msg" . }}
 apiVersion: authorization.azure.com/v1api20200801preview
 kind: RoleAssignment
