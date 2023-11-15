@@ -10,19 +10,19 @@ kind: RoleAssignment
 metadata:
   {{- $roleAssignmentName := (printf "%s-%s-%s-%s" (include "managedidentity.name" $) $resourceName $roleAssignment.roleName "rbac") | lower | trunc 115 }}
   name: {{ $roleAssignmentName }}-{{ $index }}
-  namespace: {{ required (printf $requiredMsg "namespace") $.Values.namespace }}
+  namespace: {{ required (printf $requiredMsg "fluxConfigNamespace") $.Values.fluxConfigNamespace }}
   {{- with $.Values.asoAnnotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
   principalIdFromConfig:
-    name: {{ include "managedidentity.configMapName" $ }} 
-    key: principalId   
-  roleDefinitionReference:   
-    armId: {{ include "roleAssignment.roleDefinitionId" $roleAssignment.roleName }} 
+    name: {{ include "managedidentity.configMapName" $ }}
+    key: principalId
+  roleDefinitionReference:
+    armId: {{ include "roleAssignment.roleDefinitionId" $roleAssignment.roleName }}
   owner:
     armId: {{ include "roleAssignment.scope" (list $ $resourceName $resourceType) }}
----  
-{{- end }}    
+---
+{{- end }}
 {{- end }}
