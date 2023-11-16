@@ -59,7 +59,7 @@ managedidentity Name. Each service will have one managedidentity and it follows 
 managedidentity ConfigMapName
 */}}
 {{- define "managedidentity.configMapName" -}}
-{{- printf "%s-mi-identity-settings" (include "managedidentity.name" .) }}
+{{- printf "%s-mi-credential" (required (printf $requiredMsg "serviceName") $.Values.serviceName) }}
 {{- end }}
 
 {{/*
