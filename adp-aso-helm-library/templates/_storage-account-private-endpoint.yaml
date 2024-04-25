@@ -45,6 +45,7 @@ spec:
     {{- include "adp-aso-helm-library.commonTags" (list $ "") | indent 4 }} 
   owner:
     armId: {{ printf "/subscriptions/%s/resourceGroups/%s" $subscriptionId $teamRGName }}     
+{{- end }} 
 ---
 {{- if ($enablePrivateEndpoint true) }}
 apiVersion: network.azure.com/v1api20220701
