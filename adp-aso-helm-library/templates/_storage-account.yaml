@@ -47,7 +47,7 @@ spec:
   minimumTlsVersion: "TLS1_2"
   networkAcls:
     bypass: AzureServices
-    {{- if or $storageAccount.networkAcls $storageAccount.networkAcls.ipRules (eq $enablePrivateEndpoint "enable") }}
+    {{- if or (and $storageAccount.networkAcls $storageAccount.networkAcls.ipRules) (eq $enablePrivateEndpoint "enable") }}
     defaultAction: Deny
     {{- else }}
     defaultAction: Allow
