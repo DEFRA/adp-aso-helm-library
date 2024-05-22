@@ -47,19 +47,24 @@ spec:
   minimumTlsVersion: "TLS1_2"
   networkAcls:
     bypass: AzureServices
+    {{- if or $storageAccount.networkAcls $storageAccount.networkAcls.ipRules (eq $enablePrivateEndpoint "enable") }}
     defaultAction: Deny
+    {{- else }}
+    defaultAction: Allow
+    resourceAccessRules: []
+    {{- end }}
     {{- if and $storageAccount.networkAcls $storageAccount.networkAcls.ipRules }}
     ipRules: 
     {{- range $storageAccount.networkAcls.ipRules }}
     - action: Allow
       value: {{ . }}
-    {{- end }} 
-    {{- end }}    
+    {{- end }}
+    {{- end }}
   {{- if eq $enablePrivateEndpoint "enable" }}
   publicNetworkAccess: "Disabled"
-  {{- else }} 
+  {{- else }}
   publicNetworkAccess: "Enabled"
-  {{- end }} 
+  {{- end }}
   supportsHttpsTrafficOnly: true
   tags:
   {{- include "adp-aso-helm-library.commonTags" (list $ "") | indent 4 }} 
