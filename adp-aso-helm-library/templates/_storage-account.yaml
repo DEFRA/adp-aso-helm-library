@@ -8,7 +8,8 @@
 {{- $storageAccountName :=  required (printf $requiredMsg "storageAccount[].name") $storageAccount.name }}
 {{- $storageAccountFullName :=  include "storageAccount.fullname" (list $ $storageAccountName) }}
 {{- $owner := $storageAccount.owner | default "yes" }}
-{{- $storageAccountSku :=  $.Values.storageAccountSku | default "Standard_LRS" }} 
+{{- $storageAccountSku :=  $.Values.storageAccountSku | default "Standard_LRS" }}
+{{- $enablePrivateEndpoint := $.Values.enablePrivateEndpoint | default "disable" }}
 {{- if eq $owner "yes" }}
 apiVersion: storage.azure.com/v1api20220901
 kind: StorageAccount
@@ -54,10 +55,10 @@ spec:
       value: {{ . }}
     {{- end }} 
     {{- end }}    
-  {{- if and $storageAccount.networkAcls $storageAccount.networkAcls.ipRules }}  
-  publicNetworkAccess: "Enabled" 
-  {{- else }} 
+  {{- if eq $enablePrivateEndpoint "enable" }}
   publicNetworkAccess: "Disabled"
+  {{- else }} 
+  publicNetworkAccess: "Enabled"
   {{- end }} 
   supportsHttpsTrafficOnly: true
   tags:
@@ -76,7 +77,7 @@ spec:
 ---  
 {{- include "adp-aso-helm-library.storage-account-blob-services-container" (list $ .) }} 
 {{- end }} 
-{{- if $storageAccount.tables }}  
+{{- if $storageAccount.tables }}
 ---  
 {{- include "adp-aso-helm-library.storage-account-table-services-table" (list $ .) }}  
 {{- end }} 
