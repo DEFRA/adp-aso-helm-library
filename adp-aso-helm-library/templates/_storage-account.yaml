@@ -1,8 +1,8 @@
 {{- define "adp-aso-helm-library.storage-account" -}}
 {{- $requiredMsg := include "adp-aso-helm-library.default-check-required-msg" . }}
 {{- $teamRGName := required (printf $requiredMsg "teamResourceGroupName") .Values.teamResourceGroupName }}
-{{- $subscriptionId := required (printf $requiredMsg "subscriptionId") .Values.subscriptionId }} 
-{{- $environment := required (printf $requiredMsg "environment") $.Values.environment | lower }} 
+{{- $subscriptionId := required (printf $requiredMsg "subscriptionId") .Values.subscriptionId }}
+{{- $environment := required (printf $requiredMsg "environment") $.Values.environment | lower }}
 {{- $storageAccountObject := required (printf $requiredMsg "storageAccounts") .Values.storageAccounts }}
 {{- range $storageAccount := .Values.storageAccounts }}
 {{- $storageAccountName :=  required (printf $requiredMsg "storageAccount[].name") $storageAccount.name }}
@@ -15,12 +15,12 @@ apiVersion: storage.azure.com/v1api20220901
 kind: StorageAccount
 metadata:
   name: {{ include "storageAccount.metadata.fullname" (list $ $storageAccountFullName) }}
-  namespace: {{ required (printf $requiredMsg "namespace") $.Values.namespace | quote }}  
+  namespace: {{ required (printf $requiredMsg "namespace") $.Values.namespace | quote }}
   {{- with $.Values.asoAnnotations }}
   annotations: 
     serviceoperator.azure.com/reconcile-policy: detach-on-delete
     {{- toYaml . | nindent 4 }}
-  {{- end }}  
+  {{- end }}
 spec:
   azureName: {{ $storageAccountFullName }}
   accessTier: {{ $storageAccount.accessTier | default "Hot" }}
@@ -67,24 +67,31 @@ spec:
   {{- end }}
   supportsHttpsTrafficOnly: true
   tags:
-  {{- include "adp-aso-helm-library.commonTags" (list $ "") | indent 4 }} 
+  {{- include "adp-aso-helm-library.commonTags" (list $ "") | indent 4 }}
   owner:
-    armId: {{ printf "/subscriptions/%s/resourceGroups/%s" $subscriptionId $teamRGName }}  
+    armId: {{ printf "/subscriptions/%s/resourceGroups/%s" $subscriptionId $teamRGName }}
 ---
-{{- include "adp-aso-helm-library.storage-account-private-endpoint" (list $ $storageAccount $storageAccountFullName "blob") }} 
+{{- include "adp-aso-helm-library.storage-account-private-endpoint" (list $ $storageAccount $storageAccountFullName "blob") }}
 ---
 {{- include "adp-aso-helm-library.storage-account-private-endpoint" (list $ $storageAccount $storageAccountFullName "table") }}
-{{- end }} 
+{{- end }}
+---
+{{- include "adp-aso-helm-library.storage-account-blob-service" (list $ .) }}
+---
+{{- if $storageAccount.blobContainers }}
 ---  
-{{- include "adp-aso-helm-library.storage-account-blob-service" (list $ .) }} 
---- 
-{{- if $storageAccount.blobContainers }}  
----  
-{{- include "adp-aso-helm-library.storage-account-blob-services-container" (list $ .) }} 
-{{- end }} 
+{{- include "adp-aso-helm-library.storage-account-blob-services-container" (list $ .) }}
+{{- end }}
 {{- if $storageAccount.tables }}
 ---  
-{{- include "adp-aso-helm-library.storage-account-table-services-table" (list $ .) }}  
-{{- end }} 
+{{- include "adp-aso-helm-library.storage-account-table-services-table" (list $ .) }}
+{{- end }}
+---
+{{- include "adp-aso-helm-library.storage-account-file-service" (list $ .) }}
+---
+{{- if $storageAccount.fileShares }}
+---  
+{{- include "adp-aso-helm-library.storage-account-file-services-share" (list $ .) }}
+{{- end }}
 {{- end }}
 {{- end }}

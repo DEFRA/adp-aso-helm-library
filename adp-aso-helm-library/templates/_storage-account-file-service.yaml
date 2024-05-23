@@ -1,0 +1,37 @@
+{{- define "adp-aso-helm-library.storage-account-file-service" -}}
+{{- $ := index . 0 }}
+{{- $storageAccountObj := index . 1 }}
+{{- $requiredMsg := include "adp-aso-helm-library.default-check-required-msg" . }}
+{{- $storageAccountFullName := include "storageAccount.fullname" (list $ $storageAccountObj.name) }}
+apiVersion: storage.azure.com/v1api20230101
+kind: StorageAccountsFileService
+metadata:
+  name: {{ include "storageaccountsService.metadata.defaultName" (list $ $storageAccountFullName) }}
+  namespace: {{ required (printf $requiredMsg "namespace") $.Values.namespace | quote }}
+  {{- with $.Values.asoAnnotations }}
+  annotations:
+    serviceoperator.azure.com/reconcile-policy: detach-on-delete
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if and $storageAccountObj.storageAccountsFileService $storageAccountObj.storageAccountsFileService.deleteRetentionPolicy $storageAccountObj.storageAccountsFileService.deleteRetentionPolicy.enabled }}
+  {{- $shareDeleteRetentionInDays := required (printf $requiredMsg "storageAccountsFileService.deleteRetentionPolicy.days") $storageAccountObj.storageAccountsFileService.deleteRetentionPolicy.days }}
+  shareDeleteRetentionPolicy:
+    enabled: true
+    days: {{ $shareDeleteRetentionInDays }}
+  {{- else }}
+  deleteRetentionPolicy:
+    {{- if and $storageAccountObj.storageAccountsFileService $storageAccountObj.storageAccountsFileService.deleteRetentionPolicy (eq $storageAccountObj.storageAccountsFileService.deleteRetentionPolicy.enabled false) }}
+    enabled: false
+    {{- else }}
+    enabled: true
+    days: 7
+    {{- end }}
+  {{- end }}
+  protocolSettings: {
+    smb: {}
+  }
+  cors: {}
+  owner:
+    armId: {{ printf "/subscriptions/%s/resourceGroups/%s/providers/Microsoft.Storage/storageAccounts/%s" $.Values.subscriptionId $.Values.teamResourceGroupName $storageAccountFullName }} 
+{{- end }}

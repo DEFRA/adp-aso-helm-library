@@ -1,0 +1,30 @@
+{{- define "adp-aso-helm-library.storage-account-file-services-share" -}}
+{{- $ := index . 0 }}
+{{- $storageAccountObj := index . 1 }}
+{{- $requiredMsg := include "adp-aso-helm-library.default-check-required-msg" . }}
+{{- $storageAccountFullName := include "storageAccount.fullname" (list $ $storageAccountObj.name) }}
+{{- range $storageAccountsFileServicesShare := $storageAccountObj.fileShares }}
+apiVersion: storage.azure.com/v1api20230101
+kind: StorageAccountsFileServicesShare
+metadata:
+  name: {{ include "storageAccountsFileServicesShare.metadata.fullname" (list $ $storageAccountFullName $storageAccountsFileServicesShare.name) }}
+  namespace: {{ required (printf $requiredMsg "namespace") $.Values.namespace | quote }}
+  {{- with $.Values.asoAnnotations }}
+  annotations:
+    serviceoperator.azure.com/reconcile-policy: detach-on-delete
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  azureName: {{ $storageAccountsFileServicesShare.name }}
+  accessTier: {{ $storageAccountsFileServicesShare.accessTier | default "TransactionOptimized" }}
+  shareQuota: {{ $storageAccountsFileServicesShare.shareQuota | default "10" }}
+  enabledProtocols: {{ $storageAccountsFileServicesShare.enabledProtocols | default "SMB" }}
+  owner:
+    armId: {{ printf "/subscriptions/%s/resourceGroups/%s/providers/Microsoft.Storage/storageAccounts/%s/fileServices/default" $.Values.subscriptionId $.Values.teamResourceGroupName $storageAccountFullName }}
+# ---
+# {{- if $storageAccountsFileServicesShare.roleAssignments }}
+# ---
+# {{- include "adp-aso-helm-library.storage-account-role-assignment" (list $ $storageAccountsFileServicesShare.roleAssignments $storageAccountFullName $storageAccountsFileServicesShare.name "storageContainer") }}
+# {{- end }}
+{{- end }}
+{{- end }}
