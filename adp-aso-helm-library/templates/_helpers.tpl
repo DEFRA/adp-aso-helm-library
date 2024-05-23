@@ -199,6 +199,16 @@ Storage account Table metadata FullName
 {{- end }}
 
 {{/*
+Storage account file service share metadata FullName
+*/}}
+{{- define "storageAccountsFileServicesShare.metadata.fullname" -}}
+{{- $ := index . 0 }}
+{{- $storageAccountName := index . 1 }}
+{{- $shareName := index . 2 }}
+{{- (printf "%s-%s" (include "storageaccountsService.metadata.defaultName" (list $ $storageAccountName)) $shareName) | lower }}
+{{- end }}
+
+{{/*
 PrivateEndpoint Name.
 */}}
 {{- define "privateEndpoint.name" -}}
