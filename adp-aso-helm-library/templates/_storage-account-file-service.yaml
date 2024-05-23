@@ -3,7 +3,7 @@
 {{- $storageAccountObj := index . 1 }}
 {{- $requiredMsg := include "adp-aso-helm-library.default-check-required-msg" . }}
 {{- $storageAccountFullName := include "storageAccount.fullname" (list $ $storageAccountObj.name) }}
-apiVersion: storage.azure.com/v1api20230101
+apiVersion: storage.azure.com/v1api20220901
 kind: StorageAccountsFileService
 metadata:
   name: {{ include "storageaccountsService.metadata.defaultName" (list $ $storageAccountFullName) }}
