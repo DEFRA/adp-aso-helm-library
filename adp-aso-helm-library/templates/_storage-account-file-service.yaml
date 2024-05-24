@@ -20,7 +20,7 @@ spec:
     enabled: true
     days: {{ $shareDeleteRetentionInDays }}
   {{- else }}
-  deleteRetentionPolicy:
+  shareDeleteRetentionPolicy:
     {{- if and $storageAccountObj.storageAccountsFileService $storageAccountObj.storageAccountsFileService.deleteRetentionPolicy (eq $storageAccountObj.storageAccountsFileService.deleteRetentionPolicy.enabled false) }}
     enabled: false
     {{- else }}
