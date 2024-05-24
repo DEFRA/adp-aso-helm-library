@@ -1,10 +1,13 @@
 namespace: adp-demo
 subscriptionId: 00000000-0000-0000-0000-000000000000
+azrMSTPrivateLinkDNSSubscriptionID: 00000000-0000-0000-0000-000000000000
 teamResourceGroupName: adp-demo-team-rg
-storageAccountPrefix: adp-demo-sa
-serviceBusResourceGroupName: adp-demo-rg
-serviceBusNamespaceName: adp-demo-ns
+azrMSTPrivateLinkDNSUKSouthResourceGroupName: adp-demo-dns-rg-uks
+azrMSTPrivateLinkDNSUKWestResourceGroupName: adp-demo-dns-rg-ukw
 virtualNetworkResourceGroupName: adp-demo-net-rg
+serviceBusResourceGroupName: adp-demo-rg
+storageAccountPrefix: adp-demo-sa
+serviceBusNamespaceName: adp-demo-ns
 virtualNetworkName: adp-demo-net
 privateEndpointSubnetName: adp-demo-sub-net
 privateEndpointPrefix: adp-demo-pe
@@ -12,6 +15,7 @@ teamMIPrefix: adp-mi
 serviceName: adp-demo-app
 fluxConfigNamespace: flux-config
 environment: env1
+enablePrivateEndpoint: enable
 namespaceQueues:
   - name: demo-queue
     roleAssignments:

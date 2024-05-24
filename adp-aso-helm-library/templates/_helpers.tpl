@@ -78,7 +78,17 @@ roleDefinitionId for the roleAssignment
 {{- printf (include "builtInRole.azureServiceBusDataReceiverId" .) }}
 {{- else if eq $roleName "keyvaultsecretuser" }}
 {{- printf (include "builtInRole.keyVaultSecretsUserId" .) }}
-{{- else if eq $roleName "tabledatacontributor" }}
+{{- else }}
+{{- fail (printf "Value for roleName is not as expected. '%s' role is not in the allowed roles." $roleName) }}
+{{- end }}
+{{- end }}
+
+{{/*
+Storage Account roleDefinitionId for the roleAssignment
+*/}}
+{{- define "roleAssignment.saRoleDefinitionId" -}}
+{{- $roleName := . | lower }}
+{{- if eq $roleName "tabledatacontributor" }}
 {{- printf (include "builtInRole.storageTableDataContributorId" .) }}
 {{- else if eq $roleName "blobdatacontributor" }}
 {{- printf (include "builtInRole.storageBlobDataContributorId" .) }}
@@ -87,7 +97,7 @@ roleDefinitionId for the roleAssignment
 {{- else if eq $roleName "blobdatareader" }}
 {{- printf (include "builtInRole.storageBlobDataReaderId" .) }}
 {{- else }}
-{{- fail (printf "Value for roleName is not as expected. '%s' role is not in the allowed roles." $roleName) }}
+{{- fail (printf "Value for roleName is not as expected. The storage account role '%s' is not in the allowed roles." $roleName) }}
 {{- end }}
 {{- end }}
 
