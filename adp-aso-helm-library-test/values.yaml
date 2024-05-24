@@ -34,3 +34,8 @@ storageAccounts:
       - name: table01
         roleAssignments:
           - roleName: 'TableDataContributor'
+    fileShares:
+      - name: share-01
+      - name: share-02
+        accessTier: Hot
+        shareQuota: 50
