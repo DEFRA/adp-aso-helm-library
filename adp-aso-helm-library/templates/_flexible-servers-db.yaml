@@ -21,6 +21,7 @@ spec:
   {{- $postgresResourceGroupName := required (printf $requiredMsg "postgresResourceGroupName") .Values.postgresResourceGroupName }}
   owner:
     armId: {{ printf "/subscriptions/%s/resourceGroups/%s/providers/Microsoft.DBforPostgreSQL/flexibleServers/%s" $subscriptionId $postgresResourceGroupName $postgresServerName }}
+---
 {{- end }}
 
 {{- define "adp-aso-helm-library.flexible-servers-db" }}

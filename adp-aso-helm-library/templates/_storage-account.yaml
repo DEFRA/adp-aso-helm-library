@@ -73,31 +73,30 @@ spec:
 ---
 {{- if eq $enablePrivateEndpoint "enable" }}
 {{- include "adp-aso-helm-library.storage-account-private-endpoint" (list $ $storageAccount $storageAccountFullName "blob") }}
----
 {{- include "adp-aso-helm-library.storage-account-private-endpoint" (list $ $storageAccount $storageAccountFullName "table") }}
 {{- end }}
+
 {{- if $storageAccount.roleAssignments }} 
---- 
 {{- include "adp-aso-helm-library.storage-account-role-assignment" (list $ $storageAccount.roleAssignments $storageAccountFullName) }}   
 {{- end }}
-{{- end }}
----
+
+{{- end }} 
+
 {{- include "adp-aso-helm-library.storage-account-blob-service" (list $ .) }}
----
+
 {{- if $storageAccount.blobContainers }}
----  
 {{- include "adp-aso-helm-library.storage-account-blob-services-container" (list $ .) }}
 {{- end }}
+
 {{- if $storageAccount.tables }}
----  
 {{- include "adp-aso-helm-library.storage-account-table-services-table" (list $ .) }}
 {{- end }}
----
+
 {{- include "adp-aso-helm-library.storage-account-file-service" (list $ .) }}
----
+
 {{- if $storageAccount.fileShares }}
----  
 {{- include "adp-aso-helm-library.storage-account-file-services-share" (list $ .) }}
 {{- end }}
+
 {{- end }}
 {{- end }}

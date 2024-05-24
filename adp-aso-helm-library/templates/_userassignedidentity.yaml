@@ -37,9 +37,8 @@ spec:
   {{- $subscriptionId := required (printf $requiredMsg "subscriptionId") .Values.subscriptionId }}
   owner:
     armId: {{ printf "/subscriptions/%s/resourceGroups/%s" $subscriptionId $teamRGName }}
-
-{{- if and .Values.userAssignedIdentity .Values.userAssignedIdentity.federatedCreds }}    
---- 
+---
+{{- if and .Values.userAssignedIdentity .Values.userAssignedIdentity.federatedCreds }} 
 {{- include "adp-aso-helm-library.federated-credential" $ }}   
 {{- end }}    
 

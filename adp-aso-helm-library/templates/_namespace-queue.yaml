@@ -33,13 +33,11 @@ spec:
   {{- $serviceBusNamespaceName := required (printf $requiredMsg "serviceBusNamespaceName") $.Values.serviceBusNamespaceName }}
   owner:
     armId: {{ printf "/subscriptions/%s/resourceGroups/%s/providers/Microsoft.ServiceBus/namespaces/%s" $subscriptionId $serviceBusResourceGroupName $serviceBusNamespaceName }} 
- 
+--- 
 {{- end }}
 {{- if $namespaceQueue.roleAssignments }}    
----
 {{- include "adp-aso-helm-library.role-assignment-managed" (list $ $namespaceQueue.roleAssignments $queueName "namespaceQueue") }}  
 {{- else }}
---- 
 {{- end }}  
 {{- end }}
 {{- end }}

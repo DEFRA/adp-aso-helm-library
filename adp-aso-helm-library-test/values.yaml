@@ -16,6 +16,21 @@ serviceName: adp-demo-app
 fluxConfigNamespace: flux-config
 environment: env1
 enablePrivateEndpoint: enable
+clusterOIDCIssuerUrl: >-
+      https://uksouth.oic.prod-aks.azure.com/00000000-0000-0000-0000-000000000000/00000000-0000-0000-0000-000000000000/
+userAssignedIdentity:
+      federatedCreds:
+        - namespace: adp-demo
+          serviceAccountName: adp-demo-app-sa
+commonTags:
+      environment: env1
+      kubernetes_cluster: adp-aks1
+      kubernetes_label_serviceCode: adp-demo
+      kubernetes_namespace: adp-demo
+      serviceCode: adp-demo
+      serviceName: adp-demo-app
+      serviceType: Dedicated
+
 namespaceQueues:
   - name: demo-queue
     roleAssignments:
@@ -24,6 +39,14 @@ namespaceTopics:
   - name: demo-topic
     roleAssignments:
       - roleName: 'TopicSender'
+    topicSubscriptions:
+      - name: subscription-01
+        topicSubscriptionRules:
+          - name: subscription-rule-01
+            filterType: SqlFilter
+            sqlFilter:
+              sqlExpression: "3=3"
+
 storageAccounts:
   - name: storage01
     roleAssignments:
@@ -42,3 +65,14 @@ storageAccounts:
       - name: share-02
         accessTier: Hot
         shareQuota: 50
+
+postgresServerName: adp-demo-postgres
+postgresResourceGroupName: adp-demo-pg-rg
+postgres:
+  db:
+    name: adp-demo-db
+    charset: UTF8
+    collation: en_US.utf8
+
+keyVaultResourceGroupName: adp-demo-kv-rg
+keyVaultName: adp-demo-kv

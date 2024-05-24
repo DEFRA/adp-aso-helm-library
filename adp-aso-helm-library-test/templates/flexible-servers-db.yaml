@@ -1,0 +1,3 @@
+{{- include "adp-aso-helm-library.flexible-servers-db" (list . "adp-microservice.postgres-flexible-db") -}}
+{{- define "adp-microservice.postgres-flexible-db" -}}
+{{- end -}}

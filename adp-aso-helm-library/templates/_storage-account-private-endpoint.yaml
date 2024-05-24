@@ -45,8 +45,9 @@ spec:
     {{- include "adp-aso-helm-library.commonTags" (list $ "") | indent 4 }} 
   owner:
     armId: {{ printf "/subscriptions/%s/resourceGroups/%s" $subscriptionId $teamRGName }}
-{{- end }}
 ---
+{{- end }}
+
 {{- if eq $enablePrivateEndpoint "enable" }}
 apiVersion: network.azure.com/v1api20220701
 kind: PrivateEndpointsPrivateDnsZoneGroup
@@ -71,6 +72,7 @@ spec:
   - name: privatelink-table-core-windows-net
     privateDnsZoneReference:
       armId: {{ include "privateDNSZone.resourceId" (list $ ($environment) "privatelink.table.core.windows.net" ($storageAccountObj.location | default "uksouth")) }}
-  {{- end }}    
+  {{- end }} 
+---   
 {{- end }}   
 {{- end }} 

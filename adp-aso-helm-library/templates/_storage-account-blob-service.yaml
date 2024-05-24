@@ -73,4 +73,5 @@ spec:
   cors: {}
   owner:
     armId: {{ printf "/subscriptions/%s/resourceGroups/%s/providers/Microsoft.Storage/storageAccounts/%s" $.Values.subscriptionId $.Values.teamResourceGroupName $storageAccountFullName }} 
+---
 {{- end }}
