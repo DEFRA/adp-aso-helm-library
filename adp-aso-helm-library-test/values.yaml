@@ -22,11 +22,15 @@ namespaceTopics:
       - roleName: 'TopicSender'
 storageAccounts:
   - name: storage01
-    blobContainers:  
+    storageAccountsFileService:
+      deleteRetentionPolicy:
+        enabled: false
+        days: 15
+    blobContainers:
       - name: container-01
         roleAssignments:
           - roleName: 'BlobDataContributor'
-    tables:  
-      - name: table01  
+    tables:
+      - name: table01
         roleAssignments:
-          - roleName: 'TableDataContributor' 
+          - roleName: 'TableDataContributor'
