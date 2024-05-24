@@ -524,7 +524,7 @@ storageAccounts:          <Array of Object>
   - name: <string>
 ```
 
-#### Required values (Storage Account with BlobContainers and Tables)
+#### Required values (Storage Account with BlobContainers, Tables and FileShare)
 
 The following values need to be set in the parent chart's `values.yaml` in addition to the globally required values [listed above](#all-template-required-values).
 
@@ -546,6 +546,11 @@ storageAccounts:           <Array of Object>
       - name: <string>
         roleAssignments:
           - roleName: <string>
+    fileShares:
+      - name: <string>            --File Share name. Name should be lowercase and may contain only alphanumeric characters. and Character limit: 3-63
+      - name: <string>            --File Share name. Name should be lowercase and may contain only alphanumeric characters. and Character limit: 3-63
+        accessTier: <string>      --Access Tier. Allowed values are TransactionOptimized, Hot, Cold. Default is TransactionOptimized
+        shareQuota: <int>         --Storage Quota. Share Quota is defined in GiB. Default is 10
 ```
 
 #### Optional values
@@ -583,6 +588,10 @@ storageAccounts:
       restorePolicy:                                      --The blob service properties for blob restore policy 
         enabled: <bool>                                       --Default false
         days: <int>                                           --Applies when restorePolicy.enabled is set to true
+    storageAccountsFileService:                         --Confugure properties for the blob service
+      deleteRetentionPolicy:                              --The blob service properties for blob soft delete
+        enabled: <bool>                                       --Default true                          
+        days: <int>                                           --Applies when deleteRetentionPolicy.enabled is set to true. Default is 7 days
     blobContainers:                                       --List of Blob containers and roleassignments
       - name: <string>                                        --Blob container name
         roleAssignments:                                      --List of roleAssignments scope to the blob container
@@ -674,6 +683,28 @@ storageAccounts:
       - name: table01  
       - name: table02
 
+```
+##### Example 6 : Create 1 storage account and configure properties for the Storage Account FileService
+
+```
+storageAccounts:
+  - name: storage01
+    storageAccountsFileService:
+      deleteRetentionPolicy:
+        enabled: true
+        days: 20
+```
+##### Example 7 : Create 2 file share, one with default properties other one with specific properties
+
+```
+storageAccounts:
+  - name: storage01
+    owner: "No"               --Note owner is set to 'No' to indicate storage account already exists and is owned by a different service in the team
+    fileShares:
+      - name: share-01
+      - name: share-02
+        accessTier: Hot
+        shareQuota: 50
 ```
 ### **Reference Table for Resource Names in Azure and Kubernetes**
 
