@@ -1,0 +1,32 @@
+namespace: adp-demo
+subscriptionId: 00000000-0000-0000-0000-000000000000
+teamResourceGroupName: adp-demo-team-rg
+storageAccountPrefix: adp-demo-sa
+serviceBusResourceGroupName: adp-demo-rg
+serviceBusNamespaceName: adp-demo-ns
+virtualNetworkResourceGroupName: adp-demo-net-rg
+virtualNetworkName: adp-demo-net
+privateEndpointSubnetName: adp-demo-sub-net
+privateEndpointPrefix: adp-demo-pe
+teamMIPrefix: adp-mi
+serviceName: adp-demo-app
+fluxConfigNamespace: flux-config
+environment: env1
+namespaceQueues:
+  - name: demo-queue
+    roleAssignments:
+      - roleName: 'QueueSender'
+namespaceTopics:
+  - name: demo-topic
+    roleAssignments:
+      - roleName: 'TopicSender'
+storageAccounts:
+  - name: storage01
+    blobContainers:  
+      - name: container-01
+        roleAssignments:
+          - roleName: 'BlobDataContributor'
+    tables:  
+      - name: table01  
+        roleAssignments:
+          - roleName: 'TableDataContributor' 

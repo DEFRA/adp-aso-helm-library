@@ -1,0 +1,6 @@
+dependencies:
+- name: adp-aso-helm-library
+  repository: file://../adp-aso-helm-library
+  version: 1.0.22
+digest: sha256:4161ea2f9f883dc8c9fb2d0a8176abc7132f3dec77e1697b4d8b0b0ab5c36b35
+generated: "2024-05-24T10:59:54.9493473+01:00"
