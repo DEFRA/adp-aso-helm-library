@@ -21,5 +21,6 @@ spec:
   enabledProtocols: {{ $storageAccountsFileServicesShare.enabledProtocols | default "SMB" }}
   owner:
     armId: {{ printf "/subscriptions/%s/resourceGroups/%s/providers/Microsoft.Storage/storageAccounts/%s/fileServices/default" $.Values.subscriptionId $.Values.teamResourceGroupName $storageAccountFullName }}
+---
 {{- end }}
 {{- end }}
