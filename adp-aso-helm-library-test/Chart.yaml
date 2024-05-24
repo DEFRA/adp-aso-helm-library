@@ -1,0 +1,10 @@
+apiVersion: v2
+name: adp-aso-helm-library-test
+type: application
+version: 0.1.0
+description: A Helm chart for ADP ASO Helm Library Tests
+dependencies:
+  - name: adp-aso-helm-library
+    version: 1.0.23
+    repository: file://../adp-aso-helm-library
+
