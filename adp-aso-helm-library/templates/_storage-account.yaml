@@ -71,9 +71,11 @@ spec:
   owner:
     armId: {{ printf "/subscriptions/%s/resourceGroups/%s" $subscriptionId $teamRGName }}  
 ---
+{{- if eq $enablePrivateEndpoint "enable" }}
 {{- include "adp-aso-helm-library.storage-account-private-endpoint" (list $ $storageAccount $storageAccountFullName "blob") }} 
 ---
 {{- include "adp-aso-helm-library.storage-account-private-endpoint" (list $ $storageAccount $storageAccountFullName "table") }}
+{{- end }} 
 {{- end }} 
 ---  
 {{- include "adp-aso-helm-library.storage-account-blob-service" (list $ .) }} 

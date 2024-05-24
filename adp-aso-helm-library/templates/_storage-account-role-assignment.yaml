@@ -21,7 +21,7 @@ spec:
     name: {{ include "managedidentity.configMapName" $ }}
     key: principalId
   roleDefinitionReference:
-    armId: {{ include "roleAssignment.roleDefinitionId" $roleAssignment.roleName }}
+    armId: {{ include "roleAssignment.saRoleDefinitionId" $roleAssignment.roleName }}
   owner:
     armId: {{ include "storage.roleAssignment.scope" (list $ $storageAccountName $resourceName $resourceType) }}
 ---
