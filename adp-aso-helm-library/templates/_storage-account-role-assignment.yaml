@@ -2,14 +2,12 @@
 {{- $ := index . 0 }}
 {{- $roleAssignments := index . 1 }}
 {{- $storageAccountName := index . 2 }}
-{{- $resourceName := index . 3 }}
-{{- $resourceType := index . 4 }}
 {{- range $index, $roleAssignment := $roleAssignments }}
 {{- $requiredMsg := include "adp-aso-helm-library.default-check-required-msg" . }}
 apiVersion: authorization.azure.com/v1api20200801preview
 kind: RoleAssignment
 metadata:
-  {{- $roleAssignmentName := (printf "%s-%s-%s-%s-%s" (include "managedidentity.name" $) $storageAccountName $resourceName $roleAssignment.roleName "rbac") | lower | trunc 115 }}
+  {{- $roleAssignmentName := (printf "%s-%s-%s-%s" (include "managedidentity.name" $) $storageAccountName $roleAssignment.roleName "rbac") | lower | trunc 115 }}
   name: {{ $roleAssignmentName }}-{{ $index }}
   namespace: {{ required (printf $requiredMsg "fluxConfigNamespace") $.Values.fluxConfigNamespace }}
   {{- with $.Values.asoAnnotations }}
@@ -23,7 +21,7 @@ spec:
   roleDefinitionReference:
     armId: {{ include "roleAssignment.saRoleDefinitionId" $roleAssignment.roleName }}
   owner:
-    armId: {{ include "storage.roleAssignment.scope" (list $ $storageAccountName $resourceName $resourceType) }}
+    armId: {{ include "storage.roleAssignment.scope" (list $ $storageAccountName) }}
 ---
 {{- end }}
 {{- end }}

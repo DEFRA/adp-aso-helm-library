@@ -76,6 +76,10 @@ spec:
 ---
 {{- include "adp-aso-helm-library.storage-account-private-endpoint" (list $ $storageAccount $storageAccountFullName "table") }}
 {{- end }}
+{{- if $storageAccount.roleAssignments }} 
+--- 
+{{- include "adp-aso-helm-library.storage-account-role-assignment" (list $ $storageAccount.roleAssignments $storageAccountFullName) }}   
+{{- end }}
 {{- end }}
 ---
 {{- include "adp-aso-helm-library.storage-account-blob-service" (list $ .) }}

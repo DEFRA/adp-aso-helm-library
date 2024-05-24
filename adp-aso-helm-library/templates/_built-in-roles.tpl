@@ -20,29 +20,15 @@ Built In Role: Key Vault Secrets User
 {{- end }}
 
 {{/*
-Built In Role: Storage Blob DataContributor
+Custom Role: Storage Data Writer
 */}}
-{{- define "builtInRole.storageBlobDataContributorId" -}}
+{{- define "cutomRole.storageDataWriterId" -}}
 {{- printf "%s%s" "/subscriptions/00000000-0000-0000-0000-000000000000" "/providers/Microsoft.Authorization/roleDefinitions/ba92f5b4-2d11-453d-a403-e96b0029c9fe" }}
 {{- end }}
 
 {{/*
-Built In Role: Storage Blob DataReader
+Custom Role: Storage Data Reader
 */}}
-{{- define "builtInRole.storageBlobDataReaderId" -}}
+{{- define "cutomRole.storageDataReaderId" -}}
 {{- printf "%s%s" "/subscriptions/00000000-0000-0000-0000-000000000000" "/providers/Microsoft.Authorization/roleDefinitions/2a2b9908-6ea1-4ae2-8e65-a410df84e7d1" }}
-{{- end }}
-
-{{/*
-Built In Role: Storage Table DataContributor
-*/}}
-{{- define "builtInRole.storageTableDataContributorId" -}}
-{{- printf "%s%s" "/subscriptions/00000000-0000-0000-0000-000000000000" "/providers/Microsoft.Authorization/roleDefinitions/0a9a7e1f-b9d0-4cc4-a60d-0319b160aaa3" }}
-{{- end }}
-
-{{/*
-Built In Role: Storage Table DataReader
-*/}}
-{{- define "builtInRole.storageTableDataReaderId" -}}
-{{- printf "%s%s" "/subscriptions/00000000-0000-0000-0000-000000000000" "/providers/Microsoft.Authorization/roleDefinitions/76199698-9eea-4c19-bc75-cec21354c6b6" }}
 {{- end }}

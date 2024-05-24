@@ -26,18 +26,17 @@ namespaceTopics:
       - roleName: 'TopicSender'
 storageAccounts:
   - name: storage01
+    roleAssignments:
+      - roleName: 'DataReader'
+      - roleName: 'DataWriter'
     storageAccountsFileService:
       deleteRetentionPolicy:
         enabled: false
         days: 15
     blobContainers:
       - name: container-01
-        roleAssignments:
-          - roleName: 'BlobDataContributor'
     tables:
       - name: table01
-        roleAssignments:
-          - roleName: 'TableDataContributor'
     fileShares:
       - name: share-01
       - name: share-02

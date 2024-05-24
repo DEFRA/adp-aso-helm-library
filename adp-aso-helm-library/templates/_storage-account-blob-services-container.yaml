@@ -20,9 +20,5 @@ spec:
   owner:
     armId: {{ printf "/subscriptions/%s/resourceGroups/%s/providers/Microsoft.Storage/storageAccounts/%s/blobServices/default" $.Values.subscriptionId $.Values.teamResourceGroupName $storageAccountFullName }} 
 --- 
-{{- if $storageAccountsBlobServicesContainer.roleAssignments }}    
---- 
-{{- include "adp-aso-helm-library.storage-account-role-assignment" (list $ $storageAccountsBlobServicesContainer.roleAssignments $storageAccountFullName $storageAccountsBlobServicesContainer.name "storageContainer") }}   
-{{- end }} 
 {{- end }}
 {{- end }}
