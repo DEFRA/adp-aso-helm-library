@@ -472,9 +472,18 @@ userAssignedIdentity:
       serviceAccountName: ffc-demo 
 ```
 
+
 ### Storage Account
 * Template file: `_storage-account.yaml`
 * Template name: `adp-aso-helm-library.storage-account.yaml`
+
+
+> **Version 2.0.1 and above**
+>
+> Starting from version 2.0.1, the Storage Account has been enhanced with role assignments. These data role assignments are now scoped at the storage account level, introducing two new data roles: DataWriter and DataReader.
+>
+> The DataWriter role grants applications the ability to both read and write data in the blob container, tables, and files. Conversely, the DataReader role provides applications with read-only access to data in the blob container, tables, and files.
+
 
 An ASO `StorageAccount` object to create a Microsoft.Storage/storageAccounts resource and optionally sub resources Blob Containers and Tables.
 
@@ -528,7 +537,31 @@ storageAccounts:          <Array of Object>
 
 The following values need to be set in the parent chart's `values.yaml` in addition to the globally required values [listed above](#all-template-required-values).
 
+
 ```
+Version 2.0.1 and above
+
+storageAccounts:           <Array of Object>
+  - name: <string>         --Storage account name. Name should be lowercase letters and numbers and Maximum character limit is `9`
+    roleAssignments:
+       roleName: <string>    --RoleAssignment Name (Accepted values = "DataWriter", "DataReader")
+  - name: <string>
+    blobContainers:
+      - name: <string>            --Blob container name. Name should be lowercase and can contain only letters, numbers, and the hyphen/minus (-) character. Character limit: 3-63
+      - name: <string>
+    tables: 
+      - name: <string>            --Table name. Name should be lowercase and may contain only alphanumeric characters. and Character limit: 3-63
+      - name: <string>
+    fileShares:
+      - name: <string>            --File Share name. Name should be lowercase and may contain only alphanumeric characters. and Character limit: 3-63
+      - name: <string>            --File Share name. Name should be lowercase and may contain only alphanumeric characters. and Character limit: 3-63
+        accessTier: <string>      --Access Tier. Allowed values are TransactionOptimized, Hot, Cold. Default is TransactionOptimized
+        shareQuota: <int>         --Storage Quota. Share Quota is defined in GiB. Default is 10
+```
+
+```
+Version 1.0.* 
+
 storageAccounts:           <Array of Object>
   - name: <string>         --Storage account name. Name should be lowercase letters and numbers and Maximum character limit is `9`
   - name: <string>

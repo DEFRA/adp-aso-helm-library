@@ -18,17 +18,3 @@ Built In Role: Key Vault Secrets User
 {{- define "builtInRole.keyVaultSecretsUserId" -}}
 {{- printf "%s%s" "/subscriptions/00000000-0000-0000-0000-000000000000" "/providers/Microsoft.Authorization/roleDefinitions/4633458b-17de-408a-b874-0445c86b69e6" }}
 {{- end }}
-
-{{/*
-Custom Role: Storage Data Writer
-*/}}
-{{- define "cutomRole.storageDataWriterId" -}}
-{{- printf "%s%s" "/subscriptions/00000000-0000-0000-0000-000000000000" "/providers/Microsoft.Authorization/roleDefinitions/ba92f5b4-2d11-453d-a403-e96b0029c9fe" }}
-{{- end }}
-
-{{/*
-Custom Role: Storage Data Reader
-*/}}
-{{- define "cutomRole.storageDataReaderId" -}}
-{{- printf "%s%s" "/subscriptions/00000000-0000-0000-0000-000000000000" "/providers/Microsoft.Authorization/roleDefinitions/2a2b9908-6ea1-4ae2-8e65-a410df84e7d1" }}
-{{- end }}

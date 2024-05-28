@@ -14,7 +14,7 @@ privateEndpointPrefix: adp-demo-pe
 teamMIPrefix: adp-mi
 serviceName: adp-demo-app
 fluxConfigNamespace: flux-config
-environment: env1
+environment: snd
 enablePrivateEndpoint: enable
 clusterOIDCIssuerUrl: >-
       https://uksouth.oic.prod-aks.azure.com/00000000-0000-0000-0000-000000000000/00000000-0000-0000-0000-000000000000/
@@ -23,7 +23,7 @@ userAssignedIdentity:
         - namespace: adp-demo
           serviceAccountName: adp-demo-app-sa
 commonTags:
-      environment: env1
+      environment: snd
       kubernetes_cluster: adp-aks1
       kubernetes_label_serviceCode: adp-demo
       kubernetes_namespace: adp-demo

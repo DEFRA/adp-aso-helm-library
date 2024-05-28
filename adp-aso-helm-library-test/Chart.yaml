@@ -5,6 +5,6 @@ version: 0.1.0
 description: A Helm chart for ADP ASO Helm Library Tests
 dependencies:
   - name: adp-aso-helm-library
-    version: 1.0.24
+    version: ^2.0.0
     repository: file://../adp-aso-helm-library
 

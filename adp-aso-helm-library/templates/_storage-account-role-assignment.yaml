@@ -2,6 +2,7 @@
 {{- $ := index . 0 }}
 {{- $roleAssignments := index . 1 }}
 {{- $storageAccountName := index . 2 }}
+{{- $environment := $.Values.environment | lower }} 
 {{- range $index, $roleAssignment := $roleAssignments }}
 {{- $requiredMsg := include "adp-aso-helm-library.default-check-required-msg" . }}
 apiVersion: authorization.azure.com/v1api20200801preview
@@ -19,7 +20,7 @@ spec:
     name: {{ include "managedidentity.configMapName" $ }}
     key: principalId
   roleDefinitionReference:
-    armId: {{ include "roleAssignment.saRoleDefinitionId" $roleAssignment.roleName }}
+    armId: {{ include "roleAssignment.saRoleDefinitionId" (dict "roleName" $roleAssignment.roleName "environment" $environment) }}
   owner:
     armId: {{ include "storage.roleAssignment.scope" (list $ $storageAccountName) }}
 ---

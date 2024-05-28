@@ -2,4 +2,4 @@ apiVersion: v2
 name: adp-aso-helm-library
 description: A Helm chart library that captures general configuration for Azure Service Operator (ASO) resources.
 type: library
-version: 1.0.24
+version: 2.0.0
