@@ -478,7 +478,7 @@ userAssignedIdentity:
 * Template name: `adp-aso-helm-library.storage-account.yaml`
 
 
-> **Version 2.0.1 and above**
+> **Version 2.0.0 and above**
 >
 > Starting from version 2.0.1, the Storage Account has been enhanced with role assignments. These data role assignments are now scoped at the storage account level, introducing two new data roles: DataWriter and DataReader.
 >
@@ -539,7 +539,7 @@ The following values need to be set in the parent chart's `values.yaml` in addit
 
 
 ```
-Version 2.0.1 and above
+Version 2.0.0 and above
 
 storageAccounts:           <Array of Object>
   - name: <string>         --Storage account name. Name should be lowercase letters and numbers and Maximum character limit is `9`
