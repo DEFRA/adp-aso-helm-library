@@ -77,7 +77,7 @@ spec:
 {{- end }}
 
 {{- if $storageAccount.roleAssignments }} 
-{{- include "adp-aso-helm-library.storage-account-role-assignment" (list $ $storageAccount.roleAssignments $storageAccountFullName) }}   
+{{- include "adp-aso-helm-library.storage-account-role-assignment" (list $ $storageAccount.roleAssignments $storageAccountFullName $environment) }}   
 {{- end }}
 
 {{- end }} 

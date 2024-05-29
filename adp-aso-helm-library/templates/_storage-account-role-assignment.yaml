@@ -2,7 +2,7 @@
 {{- $ := index . 0 }}
 {{- $roleAssignments := index . 1 }}
 {{- $storageAccountName := index . 2 }}
-{{- $environment := $.Values.environment | lower }} 
+{{- $environment := index . 3 }} 
 {{- range $index, $roleAssignment := $roleAssignments }}
 {{- $requiredMsg := include "adp-aso-helm-library.default-check-required-msg" . }}
 apiVersion: authorization.azure.com/v1api20200801preview
