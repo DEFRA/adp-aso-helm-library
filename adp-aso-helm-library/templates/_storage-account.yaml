@@ -3,6 +3,7 @@
 {{- $teamRGName := required (printf $requiredMsg "teamResourceGroupName") .Values.teamResourceGroupName }}
 {{- $subscriptionId := required (printf $requiredMsg "subscriptionId") .Values.subscriptionId }}
 {{- $environment := required (printf $requiredMsg "environment") $.Values.environment | lower }}
+{{- $tenant := required (printf $requiredMsg "tenant") $.Values.tenant | lower }}
 {{- $storageAccountObject := required (printf $requiredMsg "storageAccounts") .Values.storageAccounts }}
 {{- range $storageAccount := .Values.storageAccounts }}
 {{- $storageAccountName :=  required (printf $requiredMsg "storageAccount[].name") $storageAccount.name }}
@@ -77,7 +78,7 @@ spec:
 {{- end }}
 
 {{- if $storageAccount.roleAssignments }} 
-{{- include "adp-aso-helm-library.storage-account-role-assignment" (list $ $storageAccount.roleAssignments $storageAccountFullName $environment) }}   
+{{- include "adp-aso-helm-library.storage-account-role-assignment" (list $ $storageAccount.roleAssignments $storageAccountFullName $environment $tenant) }}   
 {{- end }}
 
 {{- end }} 

@@ -14,6 +14,7 @@ privateEndpointPrefix: adp-demo-pe
 teamMIPrefix: adp-mi
 serviceName: adp-demo-app
 fluxConfigNamespace: flux-config
+tenant: defradev
 environment: snd
 enablePrivateEndpoint: enable
 clusterOIDCIssuerUrl: >-

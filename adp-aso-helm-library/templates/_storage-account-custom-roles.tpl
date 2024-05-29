@@ -30,12 +30,12 @@
 
 # CustomRole -  Storage Data Writer
 {{- define "customRole.storageDataWriterId" -}}
-{{- printf "%s%s%s" "/subscriptions/00000000-0000-0000-0000-000000000000" "/providers/Microsoft.Authorization/roleDefinitions/" (include "customRole.getRoleId" (dict "environment" .environment "role" "storageDataWriter")) }}
+{{- printf "%s%s%s" "/subscriptions/00000000-0000-0000-0000-000000000000" "/providers/Microsoft.Authorization/roleDefinitions/" (include "customRole.getRoleId" (dict "tenant" .tenant "environment" .environment "role" "storageDataWriter")) }}
 {{- end }}
 
 # CustomRole -  Storage Data Reader
 {{- define "customRole.storageDataReaderId" -}}
-{{- printf "%s%s%s" "/subscriptions/00000000-0000-0000-0000-000000000000" "/providers/Microsoft.Authorization/roleDefinitions/" (include "customRole.getRoleId" (dict "environment" .environment "role" "storageDataReader")) }}
+{{- printf "%s%s%s" "/subscriptions/00000000-0000-0000-0000-000000000000" "/providers/Microsoft.Authorization/roleDefinitions/" (include "customRole.getRoleId" (dict "tenant" .tenant "environment" .environment "role" "storageDataReader")) }}
 {{- end }}
 
 {{- define "customRole.roleId" -}}
@@ -43,10 +43,13 @@
 {{- end -}}
 
 {{- define "customRole.getRoleId" -}}
+{{- $tenant := .tenant -}}
 {{- $env := .environment -}}
 {{- $role := .role -}}
-{{- if eq $env "snd" -}}
+{{- if and (eq $env "snd") (eq $tenant "defradev") -}}
 {{- include (printf "customRole.defradev.%sId" $role) . }}
+{{- else if and (eq $env "snd") (eq $tenant "defra") -}}
+{{- include (printf "customRole.defraNonPrd.%sId" $role) . }}
 {{- else if eq $env "prd" -}}
 {{- include (printf "customRole.defraPrd.%sId" $role) . }}
 {{- else -}}

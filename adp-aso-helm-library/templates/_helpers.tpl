@@ -89,9 +89,9 @@ Storage Account roleDefinitionId for the roleAssignment
 {{- define "roleAssignment.saRoleDefinitionId" -}}
 {{- $roleName := .roleName | lower }}
 {{- if eq $roleName "datawriter" }}
-{{- printf (include "customRole.storageDataWriterId" (dict "environment" .environment)) }}
+{{- printf (include "customRole.storageDataWriterId" (dict "tenant" .tenant "environment" .environment)) }}
 {{- else if eq $roleName "datareader" }}
-{{- printf (include "customRole.storageDataReaderId" (dict "environment" .environment)) }}
+{{- printf (include "customRole.storageDataReaderId" (dict "tenant" .tenant "environment" .environment)) }}
 {{- else }}
 {{- fail (printf "The provided role name for the storage account, '%s', is not valid. It does not match any of the allowed roles." $roleName) }}
 {{- end }}
