@@ -685,7 +685,7 @@ storageAccounts:
 
 ```
 
-##### Example 4 : Create 1 storage account with 2 blob containers and 1 table with roleassignments
+##### Example 4 : Create 1 storage account with 2 blob containers and 1 table with roleassignments (Version 1.0.*)
 
 ```
 storageAccounts:
@@ -739,6 +739,30 @@ storageAccounts:
         accessTier: Hot
         shareQuota: 50
 ```
+
+##### Example 8 : Create 1 storage account with 2 blob containers and roleassignments scoped to storage account  (Version 2.0.*)
+
+```
+storageAccounts:
+  - name: storage01
+    roleAssignments:
+      - roleName: 'DataWriter'
+    blobContainers:  
+      - name: container-01
+      - name: container-02
+
+```
+
+##### Example 9 : Create roleassignments for existing storage account in the team  (Version 2.0.*)
+
+```
+storageAccounts:
+  - name: storage01
+    owner: 'no'
+    roleAssignments:
+      - roleName: 'DataReader'
+```
+
 ### **Reference Table for Resource Names in Azure and Kubernetes**
 
 The table below shows the Azure Service Operator (ASO) resource naming convention in Azure and Kubernetes: 
