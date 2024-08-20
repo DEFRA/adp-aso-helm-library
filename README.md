@@ -494,9 +494,10 @@ An ASO `StorageAccount` object to create a Microsoft.Storage/storageAccounts res
 |:----------|
 
 With this template, you can create the below resources.
-  - Storage Accounts
-  - Blob containers and RoleAssignments
-  - Tables and RoleAssignments
+  - Storage Accounts and RoleAssignments
+  - Blob 
+  - Tables
+  - FileShare
 
 A basic usage of this object template would involve the creation of `templates/storage-account.yaml` in the parent Helm chart (e.g. `adp-microservice`) containing:
 
@@ -530,7 +531,11 @@ For instance, in the Dev environment, the storageAccountPrefix is configured as 
 ```
 storageAccounts:          <Array of Object>
   - name: <string>        --Storage account name. Name should be Lowercase letters and numbers and Maximum character limit is `9`
+    roleAssignments:
+       roleName: <string>    --RoleAssignment Name (Accepted values = "DataWriter", "DataReader")
   - name: <string>
+    roleAssignments:
+       roleName: <string>    --RoleAssignment Name (Accepted values = "DataWriter", "DataReader")
 ```
 
 #### Required values (Storage Account with BlobContainers, Tables and FileShare)
@@ -552,33 +557,6 @@ storageAccounts:           <Array of Object>
     tables: 
       - name: <string>            --Table name. Name should be lowercase and may contain only alphanumeric characters. and Character limit: 3-63
       - name: <string>
-    fileShares:
-      - name: <string>            --File Share name. Name should be lowercase and may contain only alphanumeric characters. and Character limit: 3-63
-      - name: <string>            --File Share name. Name should be lowercase and may contain only alphanumeric characters. and Character limit: 3-63
-        accessTier: <string>      --Access Tier. Allowed values are TransactionOptimized, Hot, Cold. Default is TransactionOptimized
-        shareQuota: <int>         --Storage Quota. Share Quota is defined in GiB. Default is 10
-```
-
-```
-Version 1.0.* 
-
-storageAccounts:           <Array of Object>
-  - name: <string>         --Storage account name. Name should be lowercase letters and numbers and Maximum character limit is `9`
-  - name: <string>
-    blobContainers:
-      - name: <string>            --Blob container name. Name should be lowercase and can contain only letters, numbers, and the hyphen/minus (-) character. Character limit: 3-63
-        roleAssignments:
-          - roleName: <string>    --RoleAssignment Name (Accepted values = "BlobDataContributor", "BlobDataReader")
-      - name: <string>
-        roleAssignments:
-          - roleName: <string>
-    tables: 
-      - name: <string>            --Table name. Name should be lowercase and may contain only alphanumeric characters. and Character limit: 3-63
-        roleAssignments:
-          - roleName: <string>    --RoleAssignment Name (Accepted values = "TableDataContributor", "TableDataReader")
-      - name: <string>
-        roleAssignments:
-          - roleName: <string>
     fileShares:
       - name: <string>            --File Share name. Name should be lowercase and may contain only alphanumeric characters. and Character limit: 3-63
       - name: <string>            --File Share name. Name should be lowercase and may contain only alphanumeric characters. and Character limit: 3-63
@@ -625,14 +603,10 @@ storageAccounts:
       deleteRetentionPolicy:                              --The blob service properties for blob soft delete
         enabled: <bool>                                       --Default true                          
         days: <int>                                           --Applies when deleteRetentionPolicy.enabled is set to true. Default is 7 days
-    blobContainers:                                       --List of Blob containers and roleassignments
-      - name: <string>                                        --Blob container name
-        roleAssignments:                                      --List of roleAssignments scope to the blob container
-          - roleName: <string>                                --RoleAssignment Name (Accepted values = "BlobDataContributor", "BlobDataReader")    
-    tables:                                               --List of Tables and roleassignments
+    blobContainers:                                       --List of Blob containers
+      - name: <string>                                        --Blob container name   
+    tables:                                               --List of Tables
       - name: <string>                                        --Table name
-        roleAssignments:                                      --List of roleAssignments scope to the table
-          - roleName: <string>                                --RoleAssignment Name (Accepted values = "TableDataContributor", "TableDataReader")
 ```
 #### Usage examples
 The following section provides usage examples for the storage account template.
@@ -642,7 +616,11 @@ The following section provides usage examples for the storage account template.
 ```
 storageAccounts:
   - name: storage01
+    roleAssignments:
+      - roleName: 'DataWriter'
   - name: storage02
+    roleAssignments:
+      - roleName: 'DataReader'
 
 ```
 
@@ -651,6 +629,8 @@ storageAccounts:
 ```
 storageAccounts:
   - name: storage01
+    roleAssignments:
+      - roleName: 'DataWriter'
     accessTier: Hot
     location: uksouth
     allowCrossTenantReplication: false
@@ -667,6 +647,8 @@ storageAccounts:
 ```
 storageAccounts:
   - name: storage01
+    roleAssignments:
+      - roleName: 'DataWriter'
     storageAccountsBlobService:
       changeFeed:
         enabled: true
@@ -685,22 +667,18 @@ storageAccounts:
 
 ```
 
-##### Example 4 : Create 1 storage account with 2 blob containers and 1 table with roleassignments (Version 1.0.*)
+##### Example 4 : Create 1 storage account with 2 blob containers and 1 table
 
 ```
 storageAccounts:
   - name: storage01
+    roleAssignments:
+      - roleName: 'DataWriter'
     blobContainers:  
       - name: container-01
-        roleAssignments:
-          - roleName: 'BlobDataContributor' 
       - name: container-02
-        roleAssignments:
-          - roleName: 'BlobDataReader'   
     tables:  
-      - name: table01  
-        roleAssignments:
-          - roleName: 'TableDataContributor' 
+      - name: table01
 
 ```
 
@@ -710,6 +688,8 @@ storageAccounts:
 storageAccounts:
   - name: storage01
     owner: "No"               --Note owner is set to 'No' to indicate storage account already exists and is owned by a different service in the team
+    roleAssignments:
+      - roleName: 'DataWriter'
     blobContainers:  
       - name: container-01
     tables:  
@@ -722,6 +702,8 @@ storageAccounts:
 ```
 storageAccounts:
   - name: storage01
+    roleAssignments:
+      - roleName: 'DataWriter'
     storageAccountsFileService:
       deleteRetentionPolicy:
         enabled: true
@@ -733,6 +715,8 @@ storageAccounts:
 storageAccounts:
   - name: storage01
     owner: "No"               --Note owner is set to 'No' to indicate storage account already exists and is owned by a different service in the team
+    roleAssignments:
+      - roleName: 'DataWriter'
     fileShares:
       - name: share-01
       - name: share-02
@@ -740,20 +724,7 @@ storageAccounts:
         shareQuota: 50
 ```
 
-##### Example 8 : Create 1 storage account with 2 blob containers and roleassignments scoped to storage account  (Version 2.0.*)
-
-```
-storageAccounts:
-  - name: storage01
-    roleAssignments:
-      - roleName: 'DataWriter'
-    blobContainers:  
-      - name: container-01
-      - name: container-02
-
-```
-
-##### Example 9 : Create roleassignments for existing storage account in the team  (Version 2.0.*)
+##### Example 9 : Create roleassignments with reader access for existing storage account in the team
 
 ```
 storageAccounts:

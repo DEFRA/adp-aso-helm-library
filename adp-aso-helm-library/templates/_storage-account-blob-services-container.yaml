@@ -4,6 +4,9 @@
 {{- $requiredMsg := include "adp-aso-helm-library.default-check-required-msg" . }}
 {{- $storageAccountFullName := include "storageAccount.fullname" (list $ $storageAccountObj.name) }}
 {{- range $storageAccountsBlobServicesContainer := $storageAccountObj.blobContainers }}
+{{- if $storageAccountsBlobServicesContainer.roleAssignments }} 
+{{- fail (printf "RoleAssignments at the Container scope is now deprecated. Please set roleAssignments at the storage account level and reference version ^2.0.0 of the adp-aso-helm-library in the chart.yaml file.") }} 
+{{- end }}
 apiVersion: storage.azure.com/v1api20220901
 kind: StorageAccountsBlobServicesContainer
 metadata:
